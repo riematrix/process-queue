@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Simple Process Queue</title>
+    <style type="text/css">
+        p{
+            background: -webkit-linear-gradient(top, #cdcdcd, #dedede);
+            margin: 3px;
+            font-size: 30px;
+        }
+    </style>
+</head>
+<body>
+<div id="container">
+</div>
+<script src="queue.js"></script>
+<script type="text/javascript">
+
+    window.onload = function(){
+        var queue = new Queue();
+
+        queue.add(function(next){
+            appendResult("first process");
+            next();
+        }).add(function(next){
+            setTimeout(function(){
+                appendResult("second process");
+                next();
+            },1000)
+        }).add(function(next){
+            setTimeout(function(){
+                appendResult("last process");
+                next();
+            },2000);
+        });
+
+        queue.execute(function(){
+            alert("all done!")
+        })
+    };
+
+    function appendResult(result){
+        var p = document.createElement("p"),
+        text = document.createTextNode(result);
+        p.appendChild(text);
+        document.getElementById("container").appendChild(p);
+    }
+</script>
+</body>
+</html>
